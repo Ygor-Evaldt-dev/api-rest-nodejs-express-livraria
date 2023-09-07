@@ -3,15 +3,16 @@ import book from "./book.js";
 import author from "./author.js";
 import HttpResponse from "../utils/helpers/HttpResponse.js";
 
-export default function route(app) {
-    app.route('/').get((req, res) => {
-        const { status, body } = HttpResponse.ok({ message: "Ok" });
-        res.status(status).json(body);
-    });
+export default class Route {
+    static init(app) {
+        app.route('/').get((req, res) => {
+            HttpResponse.ok({ req, res, body: { message: "Ok" } })
+        });
 
-    app.use(
-        express.json(),
-        book,
-        author
-    );
+        app.use(
+            express.json(),
+            book,
+            author
+        );
+    }
 }

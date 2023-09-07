@@ -1,10 +1,9 @@
 import express from "express";
 import DataBase from "./config/DataBase.js";
-import route from "./routes/index.js";
-
-DataBase.connect();
+import Route from "./routes/index.js";
 
 const app = express();
-route(app);
+DataBase.connect();
+Route.init(app);
 
 export default app;

@@ -6,7 +6,7 @@ export default class BookController {
         try {
             const authors = await authorModel.find().exec();
             if (!authors[0]) {
-                HttpResponse.notFound(req, res);
+                HttpResponse.notFound({ req, res });
                 return;
             }
             HttpResponse.ok({ req, res, body: authors });

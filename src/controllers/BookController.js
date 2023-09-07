@@ -16,8 +16,8 @@ export default class BookController {
     }
 
     static async listById(req, res) {
-        const { id } = req.params;
         try {
+            const { id } = req.params;
             const book = await bookModel.findById(id).populate("author", "name").exec();
             if (!book) {
                 HttpResponse.notFound({ req, res });
@@ -30,12 +30,50 @@ export default class BookController {
     }
 
     static async listByPublisher(req, res) {
-        const { publisher } = req.query.publisher;
         try {
             const params = {
-                "publisher": publisher,
+                "publisher": req.query.publisher
             }
-            const books = await bookModel.find(params, {});
+            const queryOptions = {};
+            const books = await bookModel.find(params, queryOptions);
+            if (!books[0]) {
+                HttpResponse.notFound({ req, res });
+                return;
+            }
+            HttpResponse.ok({ req, res, body: books });
+        } catch (error) {
+            HttpResponse.internalServerError({ req, res, body: error });
+        }
+    }
+
+    static async create(req, res) {
+        try {
+            const newBook = new bookModel(req.body);
+            await newBook.save();
+            HttpResponse.created({ req, res });
+        } catch (error) {
+            HttpResponse.internalServerError({ req, res, body: error });
+        }
+    }
+
+    static async update(req, res) {
+        try {
+            const { id } = req.params;
+            const queryUpdate = {
+                $set: req.body
+            }
+            await bookModel.findByIdAndUpdate(id, queryUpdate);
+            HttpResponse.ok({ req, res, body: queryUpdate.$set });
+        } catch (error) {
+            HttpResponse.internalServerError({ req, res, body: error });
+        }
+    }
+
+    static async delete(req, res) {
+        try {
+            const { id } = req.params;
+            await bookModel.findByIdAndDelete(id);
+            HttpResponse.accepted({ req, res });
         } catch (error) {
             HttpResponse.internalServerError({ req, res, body: error });
         }

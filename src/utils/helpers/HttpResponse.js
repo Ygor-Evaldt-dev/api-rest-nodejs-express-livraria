@@ -3,9 +3,17 @@ export default class HttpResponse {
         res.status(200).json(body);
     }
 
+    static created({ req, res } = {}) {
+        res.status(201).send("Registro criado com sucesso!");
+    }
+
+    static accepted({ req, res } = {}) {
+        res.status(202).send("Registro deletado com sucesso !");
+    }
+
     static notFound({ req, res } = {}) {
         res.status(404).json({
-            message: "Nenhum registro encontrado"
+            message: "Nenhum registro encontrado."
         });
     }
 

@@ -1,5 +1,6 @@
 import express from "express";
 import book from "./book.js";
+import author from "./author.js";
 import HttpResponse from "../utils/helpers/HttpResponse.js";
 
 export default function route(app) {
@@ -10,6 +11,7 @@ export default function route(app) {
 
     app.use(
         express.json(),
-        book
+        book,
+        author
     );
 }

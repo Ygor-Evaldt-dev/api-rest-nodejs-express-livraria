@@ -1,8 +1,15 @@
 export default class HttpResponse {
-    static ok(body) {
-        return ({
-            status: 200,
-            body
+    static ok({ req, res, body = {} } = {}) {
+        res.status(200).json(body);
+    }
+
+    static notFound(req, res) {
+        res.status(200).json({
+            message: "Nenhum registro encontrado"
         });
+    }
+
+    static internalServerError({ req, res, body = {} } = {}) {
+        res.status(200).json(body);
     }
 }

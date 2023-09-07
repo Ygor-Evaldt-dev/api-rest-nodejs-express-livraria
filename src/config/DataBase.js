@@ -8,7 +8,7 @@ export default class DataBase {
             mongoose.connect(process.env.URI);
             mongoose.connection.once('open', () => {
                 console.log("Conexão com MongoDB estabelecida com suceeso.");
-            })
+            });
         } catch (error) {
             console.error("Erro ao conectar com MongoDB -> " + error);
         }

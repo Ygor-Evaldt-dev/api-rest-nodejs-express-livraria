@@ -40,5 +40,17 @@ export default class BookController {
         }
     }
 
-
+    static async update(req, res) {
+        try {
+            const { id } = req.params;
+            const { body } = req;
+            const queryUpdate = {
+                $set: body
+            }
+            await authorModel.findByIdAndUpdate(id, queryUpdate);
+            HttpResponse.ok({ req, res, body: queryUpdate.$set });
+        } catch (error) {
+            HttpResponse.internalServerError({ req, res, body: { message: "Erro ao atualizar autor", error } });
+        }
+    }
 }

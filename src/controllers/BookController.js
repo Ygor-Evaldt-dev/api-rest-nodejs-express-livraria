@@ -11,7 +11,7 @@ export default class BookController {
             }
             HttpResponse.ok({ req, res, body: books });
         } catch (error) {
-            HttpResponse.internalServerError({ req, res, body: error });
+            HttpResponse.internalServerError({ req, res, body: { message: "Erro ao buscar livros", error } });
         }
     }
 
@@ -25,14 +25,15 @@ export default class BookController {
             }
             HttpResponse.ok({ req, res, body: book });
         } catch (error) {
-            HttpResponse.internalServerError({ req, res, body: error });
+            HttpResponse.internalServerError({ req, res, body: { message: "Erro ao buscar livro", error } });
         }
     }
 
     static async listByPublisher(req, res) {
         try {
+            const { publisher } = req.query;
             const params = {
-                "publisher": req.query.publisher
+                publisher
             }
             const queryOptions = {};
             const books = await bookModel.find(params, queryOptions);
@@ -42,7 +43,7 @@ export default class BookController {
             }
             HttpResponse.ok({ req, res, body: books });
         } catch (error) {
-            HttpResponse.internalServerError({ req, res, body: error });
+            HttpResponse.internalServerError({ req, res, body: { message: `Erro ao buscar livros da editora ${publisher}`, error } });
         }
     }
 
@@ -51,7 +52,7 @@ export default class BookController {
             const newBook = await new bookModel(req.body).save();
             HttpResponse.created({ req, res, body: newBook });
         } catch (error) {
-            HttpResponse.internalServerError({ req, res, body: error });
+            HttpResponse.internalServerError({ req, res, body: { message: "Erro ao cadastrar livro", error } });
         }
     }
 
@@ -62,9 +63,10 @@ export default class BookController {
                 $set: req.body
             }
             await bookModel.findByIdAndUpdate(id, queryUpdate);
-            HttpResponse.ok({ req, res, body: queryUpdate.$set });
+            const updatedBook = Object.assign({ id }, queryUpdate.$set);
+            HttpResponse.ok({ req, res, body: updatedBook });
         } catch (error) {
-            HttpResponse.internalServerError({ req, res, body: error });
+            HttpResponse.internalServerError({ req, res, body: { message: "Erro ao atualizar livro", error } });
         }
     }
 
@@ -74,7 +76,7 @@ export default class BookController {
             await bookModel.findByIdAndDelete(id);
             HttpResponse.accepted({ req, res });
         } catch (error) {
-            HttpResponse.internalServerError({ req, res, body: error });
+            HttpResponse.internalServerError({ req, res, body: { message: "Erro ao deletar livro", error } });
         }
     }
 }

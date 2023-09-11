@@ -48,9 +48,8 @@ export default class BookController {
 
     static async create(req, res) {
         try {
-            const newBook = new bookModel(req.body);
-            await newBook.save();
-            HttpResponse.created({ req, res });
+            const newBook = await new bookModel(req.body).save();
+            HttpResponse.created({ req, res, body: newBook });
         } catch (error) {
             HttpResponse.internalServerError({ req, res, body: error });
         }

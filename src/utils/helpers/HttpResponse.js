@@ -3,8 +3,8 @@ export default class HttpResponse {
         res.status(200).json(body);
     }
 
-    static created({ req, res } = {}) {
-        res.status(201).send("Registro criado com sucesso!");
+    static created({ req, res, body = {} } = {}) {
+        res.status(201).json(body);
     }
 
     static accepted({ req, res } = {}) {

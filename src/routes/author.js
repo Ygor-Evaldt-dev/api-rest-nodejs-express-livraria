@@ -8,6 +8,6 @@ router
     .get("/authors/:id", AuthorController.listById)
     .post("/authors", AuthorController.create)
     .put("/authors/:id", AuthorController.update)
-
+    .delete("/authors/:id", AuthorController.delete);
 
 export default router;

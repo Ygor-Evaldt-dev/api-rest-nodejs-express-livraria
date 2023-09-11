@@ -48,9 +48,20 @@ export default class BookController {
                 $set: body
             }
             await authorModel.findByIdAndUpdate(id, queryUpdate);
-            HttpResponse.ok({ req, res, body: queryUpdate.$set });
+            const updatedAuthor = Object.assign({ id }, queryUpdate.$set);
+            HttpResponse.ok({ req, res, body: updatedAuthor });
         } catch (error) {
             HttpResponse.internalServerError({ req, res, body: { message: "Erro ao atualizar autor", error } });
+        }
+    }
+
+    static async delete(req, res) {
+        try {
+            const { id } = req.params;
+            await authorModel.findByIdAndDelete(id).exec();
+            HttpResponse.accepted({ req, res });
+        } catch (error) {
+            HttpResponse.internalServerError({ req, res, body: { message: "Erro ao deletar autor", error } });
         }
     }
 }
